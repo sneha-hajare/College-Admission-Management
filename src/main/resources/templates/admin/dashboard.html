@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 25px;
+            font-family: Arial, sans-serif;
+            background: #f3f6fb;
+            color: #263247;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: auto;
+        }
+
+        h1 { color: #243b67; }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #00000010;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            font-size: 15px;
+            color: #68758a;
+        }
+
+        .number {
+            font-size: 30px;
+            font-weight: bold;
+            color: #3157a4;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e6eaf0;
+        }
+
+        th { background: #edf2fc; }
+
+        .status { font-weight: bold; }
+        .pending { color: #b77900; }
+        .approved { color: #16834a; }
+        .rejected { color: #c0392b; }
+
+        .btn {
+            display: inline-block;
+            padding: 9px 12px;
+            margin: 3px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .approve { background: #16834a; }
+        .reject { background: #c0392b; }
+        .back { background: #3157a4; }
+
+        .message {
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 6px;
+        }
+
+        .success {
+            background: #d9f7e5;
+            color: #17643a;
+        }
+
+        .error {
+            background: #ffe1e1;
+            color: #a32121;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 25px;
+            color: #68758a;
+        }
+
+        .actions { min-width: 190px; }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <h1>Admin Dashboard</h1>
+    <p>College Admission Management System</p>
+
+    <a class="btn back" th:href="@{/}">Back to Home</a>
+
+    <div th:if="${successMessage}"
+         class="message success"
+         th:text="${successMessage}"></div>
+
+    <div th:if="${errorMessage}"
+         class="message error"
+         th:text="${errorMessage}"></div>
+
+    <div class="cards">
+        <div class="card">
+            <h3>Total Applications</h3>
+            <div class="number" th:text="${totalApplications}">0</div>
+        </div>
+
+        <div class="card">
+            <h3>Pending</h3>
+            <div class="number" th:text="${pendingApplications}">0</div>
+        </div>
+
+        <div class="card">
+            <h3>Approved</h3>
+            <div class="number" th:text="${approvedApplications}">0</div>
+        </div>
+
+        <div class="card">
+            <h3>Rejected</h3>
+            <div class="number" th:text="${rejectedApplications}">0</div>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <h2>All Student Applications</h2>
+
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Student Name</th>
+                <th>Course</th>
+                <th>Email</th>
+                <th>Percentage</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="app : ${applications}">
+                <td th:text="${app.id}"></td>
+                <td th:text="${app.fullName}"></td>
+                <td th:text="${app.course != null ? app.course.name : 'N/A'}"></td>
+                <td th:text="${app.email}"></td>
+                <td th:text="${app.percentage != null ? app.percentage + '%' : 'N/A'}"></td>
+
+                <td>
+                    <span class="status"
+                          th:classappend="${app.status != null ? #strings.toLowerCase(app.status) : 'pending'}"
+                          th:text="${app.status != null ? app.status : 'PENDING'}">
+                    </span>
+                </td>
+
+                <td class="actions">
+                    <div th:if="${app.status == null or app.status == 'PENDING'}">
+
+                        <form th:action="@{/admin/applications/{id}/approve(id=${app.id})}"
+                              method="post"
+                              style="display:inline;">
+                            <input type="hidden"
+                                   th:name="${_csrf.parameterName}"
+                                   th:value="${_csrf.token}">
+                            <button type="submit" class="btn approve">
+                                Approve
+                            </button>
+                        </form>
+
+                        <form th:action="@{/admin/applications/{id}/reject(id=${app.id})}"
+                              method="post"
+                              style="display:inline;">
+                            <input type="hidden"
+                                   th:name="${_csrf.parameterName}"
+                                   th:value="${_csrf.token}">
+                            <button type="submit" class="btn reject">
+                                Reject
+                            </button>
+                        </form>
+
+                    </div>
+
+                    <span th:if="${app.status != null and app.status != 'PENDING'}">
+                        Completed
+                    </span>
+                </td>
+            </tr>
+
+            <tr th:if="${#lists.isEmpty(applications)}">
+                <td colspan="7" class="empty">
+                    No applications submitted yet.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</body>
+</html>

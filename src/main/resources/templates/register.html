@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - College Admission</title>
+</head>
+<body>
+
+<h1>College Admission Management System</h1>
+
+<h2>Create Account</h2>
+
+<div th:if="${error}">
+    <p th:text="${error}"></p>
+</div>
+
+<form th:action="@{/register}" th:object="${user}" method="post">
+
+    <label>Name:</label>
+    <input type="text" th:field="*{name}" required>
+    <br><br>
+
+    <label>Email:</label>
+    <input type="email" th:field="*{email}" required>
+    <br><br>
+
+    <label>Password:</label>
+    <input type="password" th:field="*{password}" required>
+    <br><br>
+
+    <label>Phone:</label>
+    <input type="text" th:field="*{phone}">
+    <br><br>
+
+    <label>Role:</label>
+    <select th:field="*{role}">
+        <option value="APPLICANT">Applicant</option>
+        <option value="ADMIN">Admin</option>
+    </select>
+    <br><br>
+
+    <button type="submit">Register</button>
+
+</form>
+
+<br>
+
+<p>
+    Already have an account?
+    <a href="/login">Login here</a>
+</p>
+
+<p>
+    <a href="/">Back to Home</a>
+</p>
+
+</body>
+</html>

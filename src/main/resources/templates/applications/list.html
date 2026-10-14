@@ -1,0 +1,223 @@
+```html
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Applications - AdmitHub</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            margin: 0;
+            padding: 25px 15px;
+            color: #1e293b;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 20px auto;
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        h2 {
+            color: #1e3a8a;
+        }
+
+        .success {
+            padding: 12px;
+            margin-bottom: 20px;
+            background: #dcfce7;
+            color: #166534;
+            border-radius: 6px;
+        }
+
+        .empty {
+            padding: 20px;
+            background: #eff6ff;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            text-align: left;
+        }
+
+        th {
+            background: #1e3a8a;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        .pending {
+            color: #b45309;
+            font-weight: bold;
+        }
+
+        .approved {
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        .rejected {
+            color: #b91c1c;
+            font-weight: bold;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 11px 16px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .button:hover {
+            background: #1d4ed8;
+        }
+
+        .details-button {
+            display: inline-block;
+            padding: 8px 12px;
+            background: #0f766e;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            white-space: nowrap;
+        }
+
+        .details-button:hover {
+            background: #115e59;
+        }
+
+        .secondary {
+            background: #475569;
+            margin-left: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+
+            th, td {
+                padding: 8px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>My Applications</h2>
+
+    <div class="success" th:if="${submitted}">
+        Your application has been submitted successfully!
+    </div>
+
+    <div class="empty" th:if="${#lists.isEmpty(applications)}">
+        <h3>No Applications Found</h3>
+        <p>You have not submitted any applications yet.</p>
+
+        <a th:href="@{/applications/new}" class="button">
+            Apply Now
+        </a>
+    </div>
+
+    <div class="table-wrapper"
+         th:if="${not #lists.isEmpty(applications)}">
+
+        <table>
+            <thead>
+            <tr>
+                <th>Application ID</th>
+                <th>Full Name</th>
+                <th>Course</th>
+                <th>Applied Date</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="app : ${applications}">
+
+                <td th:text="${app.id}">1</td>
+
+                <td th:text="${app.fullName}">Student Name</td>
+
+                <td th:text="${app.course.name}">Course Name</td>
+
+                <td th:text="${app.appliedAt != null
+                    ? #temporals.format(app.appliedAt, 'dd-MM-yyyy HH:mm')
+                    : 'Not available'}">
+                    Applied Date
+                </td>
+
+                <td>
+                    <span th:text="${app.status}"
+                          th:classappend="${app.status == 'PENDING'
+                              ? ' pending'
+                              : (app.status == 'APPROVED'
+                                  ? ' approved'
+                                  : (app.status == 'REJECTED'
+                                      ? ' rejected' : ''))}">
+                        PENDING
+                    </span>
+                </td>
+
+                <td>
+                    <a th:href="@{/applications/{id}(id=${app.id})}"
+                       class="details-button">
+                        View Details
+                    </a>
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+
+        <a th:href="@{/applications/new}" class="button">
+            Apply for Another Course
+        </a>
+    </div>
+
+    <a th:href="@{/}" class="button secondary">
+        Back to Home
+    </a>
+
+</div>
+
+</body>
+</html>
+```

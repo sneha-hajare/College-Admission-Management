@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Courses</title>
+</head>
+<body>
+
+<h1>College Admission Management System</h1>
+<h2>Available Courses</h2>
+
+<p th:if="${courses.isEmpty()}">
+    No courses have been added yet.
+</p>
+
+<table border="1" cellpadding="10">
+    <thead>
+    <tr>
+        <th>Course ID</th>
+        <th>Course Name</th>
+        <th>Fee (₹)</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="course : ${courses}">
+        <td th:text="${course.id}"></td>
+        <td th:text="${course.name}"></td>
+        <td th:text="${course.fee}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<br>
+<a href="/courses/new">Add a Course</a>
+<br><br>
+<a href="/dashboard">Back to Dashboard</a>
+
+</body>
+</html>

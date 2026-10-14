@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Application Details | AdmitHub</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px 15px;
+            font-family: Arial, sans-serif;
+            background: #f3f6fb;
+            color: #263248;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: auto;
+        }
+
+        .header {
+            background: #263b80;
+            color: white;
+            padding: 25px;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .header h1 {
+            margin: 0 0 8px;
+        }
+
+        .header p {
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        .content {
+            background: white;
+            padding: 25px;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .section-title {
+            margin-top: 25px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #263b80;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .detail {
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+            overflow-wrap: anywhere;
+        }
+
+        .label {
+            display: block;
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 7px;
+        }
+
+        .value {
+            font-weight: bold;
+            overflow-wrap: anywhere;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 7px 13px;
+            border-radius: 20px;
+            background: #fff4d6;
+            color: #8a5a00;
+            font-size: 13px;
+        }
+
+        .status-approved {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 11px 18px;
+            background: #263b80;
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+        }
+
+        .back-button:hover {
+            background: #1c2c61;
+        }
+
+        @media (max-width: 600px) {
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header, .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <div class="header">
+        <h1>Application Details</h1>
+        <p>AdmitHub — College Admission Management System</p>
+    </div>
+
+    <div class="content">
+
+        <h2 class="section-title">Personal Information</h2>
+
+        <div class="details-grid">
+
+            <div class="detail">
+                <span class="label">Application ID</span>
+                <span class="value" th:text="${application.id}">1</span>
+            </div>
+
+            <div class="detail">
+                <span class="label">Full Name</span>
+                <span class="value"
+                      th:text="${application.fullName}">Student Name</span>
+            </div>
+
+            <div class="detail">
+                <span class="label">Email</span>
+                <span class="value"
+                      th:text="${application.email}">student@example.com</span>
+            </div>
+
+            <div class="detail">
+                <span class="label">Phone</span>
+                <span class="value"
+                      th:text="${application.phone != null ? application.phone : 'Not provided'}">
+                    Phone
+                </span>
+            </div>
+
+            <div class="detail">
+                <span class="label">Date of Birth</span>
+                <span class="value"
+                      th:text="${application.dob != null ? application.dob : 'Not provided'}">
+                    Date of Birth
+                </span>
+            </div>
+
+            <div class="detail">
+                <span class="label">Gender</span>
+                <span class="value"
+                      th:text="${application.gender != null ? application.gender : 'Not provided'}">
+                    Gender
+                </span>
+            </div>
+
+            <div class="detail">
+                <span class="label">Address</span>
+                <span class="value"
+                      th:text="${application.address != null ? application.address : 'Not provided'}">
+                    Address
+                </span>
+            </div>
+
+        </div>
+
+        <h2 class="section-title">Academic Information</h2>
+
+        <div class="details-grid">
+
+            <div class="detail">
+                <span class="label">Selected Course</span>
+                <span class="value"
+                      th:text="${application.course != null ? application.course.name : 'Not provided'}">
+                    Course
+                </span>
+            </div>
+
+            <div class="detail">
+                <span class="label">Qualification</span>
+                <span class="value"
+                      th:text="${application.qualification != null ? application.qualification : 'Not provided'}">
+                    Qualification
+                </span>
+            </div>
+
+            <div class="detail">
+                <span class="label">Percentage</span>
+                <span class="value"
+                      th:text="${application.percentage != null ? application.percentage + '%' : 'Not provided'}">
+                    Percentage
+                </span>
+            </div>
+
+        </div>
+
+        <h2 class="section-title">Application Status</h2>
+
+        <div class="details-grid">
+
+            <div class="detail">
+                <span class="label">Current Status</span>
+
+                <span class="status"
+                      th:classappend="${application.status == 'APPROVED'} ? ' status-approved' : (${application.status == 'REJECTED'} ? ' status-rejected' : '')"
+                      th:text="${application.status}">
+                    PENDING
+                </span>
+            </div>
+
+            <div class="detail">
+                <span class="label">Submitted On</span>
+                <span class="value"
+                      th:text="${application.appliedAt != null ? #temporals.format(application.appliedAt, 'dd-MM-yyyy HH:mm') : 'Not available'}">
+                    Submission Date
+                </span>
+            </div>
+
+        </div>
+
+        <a th:href="@{/applications}" class="back-button">
+            ← Back to My Applications
+        </a>
+
+    </div>
+</div>
+</body>
+</html>
+

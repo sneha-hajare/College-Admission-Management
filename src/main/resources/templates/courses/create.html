@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Course</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f5fa;
+            margin: 0;
+            padding: 30px 15px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #243b64;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        button, .back-link {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        button {
+            background: #2457c5;
+            color: white;
+        }
+
+        button:hover {
+            background: #173f98;
+        }
+
+        .back-link {
+            background: #e5e7eb;
+            color: #222;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <h2>Add New Course</h2>
+
+    <form th:action="@{/courses/save}"
+          th:object="${course}"
+          method="post">
+
+        <label for="name">Course Name</label>
+        <input type="text" id="name" th:field="*{name}" required>
+
+        <label for="code">Course Code</label>
+        <input type="text" id="code" th:field="*{code}" required>
+
+        <label for="fee">Course Fee (₹)</label>
+        <input type="number" id="fee" th:field="*{fee}"
+               min="0" step="0.01" required>
+
+        <label for="description">Description</label>
+        <textarea id="description"
+                  th:field="*{description}"></textarea>
+
+
+        <label for="duration">Duration (Years)</label>
+        <input type="number"
+               id="duration"
+               th:field="*{duration}"
+               min="1"
+               required>
+
+        <label for="eligibility">Eligibility</label>
+        <input type="text" id="eligibility"
+               th:field="*{eligibility}" required>
+
+        <label for="totalSeats">Total Seats</label>
+        <input type="number" id="totalSeats"
+               th:field="*{totalSeats}"
+               min="0" required>
+
+        <label for="availableSeats">Available Seats</label>
+        <input type="number" id="availableSeats"
+               th:field="*{availableSeats}"
+               min="0" required>
+
+        <div class="buttons">
+            <button type="submit">Save Course</button>
+            <a th:href="@{/courses}" class="back-link">Cancel</a>
+        </div>
+
+    </form>
+</div>
+</body>
+</html>

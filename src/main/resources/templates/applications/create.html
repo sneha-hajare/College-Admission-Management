@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Admission Application</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            margin: 0;
+            padding: 25px 15px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 20px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #1e3a8a;
+            margin-top: 0;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+            color: #334155;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: 2px solid #93c5fd;
+            border-color: #2563eb;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 13px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 18px;
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 18px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <h2>College Admission Application</h2>
+    <p class="subtitle">Fill in your details to apply for admission.</p>
+
+    <div class="error" th:if="${error}" th:text="${error}"></div>
+
+    <form th:action="@{/applications/submit}"
+          th:object="${application}"
+          method="post">
+
+        <div class="form-group">
+            <label for="fullName">Full Name *</label>
+            <input type="text"
+                   id="fullName"
+                   th:field="*{fullName}"
+                   placeholder="Enter your full name"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label for="dob">Date of Birth *</label>
+            <input type="date"
+                   id="dob"
+                   th:field="*{dob}"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label for="gender">Gender *</label>
+            <select id="gender" th:field="*{gender}" required>
+                <option value="">Select gender</option>
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="qualification">Previous Qualification *</label>
+            <input type="text"
+                   id="qualification"
+                   th:field="*{qualification}"
+                   placeholder="e.g. PUC / 12th Standard"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label for="percentage">Percentage *</label>
+            <input type="number"
+                   id="percentage"
+                   th:field="*{percentage}"
+                   min="0"
+                   max="100"
+                   step="0.01"
+                   placeholder="Enter percentage"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label for="address">Address *</label>
+            <textarea id="address"
+                      th:field="*{address}"
+                      placeholder="Enter your full address"
+                      required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="course">Select Course *</label>
+            <select id="course" th:field="*{course.id}" required>
+                <option value="">Select a course</option>
+                <option th:each="courseItem : ${courses}"
+                        th:value="${courseItem.id}"
+                        th:text="${courseItem.name}">
+                </option>
+            </select>
+        </div>
+
+        <button type="submit" class="submit-btn">
+            Submit Application
+        </button>
+
+    </form>
+
+    <a th:href="@{/}" class="back-link">Back to Home</a>
+
+</div>
+</body>
+</html>
